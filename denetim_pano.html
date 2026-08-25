@@ -360,4 +360,147 @@ function detayKapat(){document.getElementById('modal').classList.remove('acik');
 document.getElementById('md-kapat').addEventListener('click',detayKapat);
 document.getElementById('modal').addEventListener('click',function(e){
  if(e.target===this)detayKapat();});
+</script><script>window.OZET_DATA={"tarih": "25.08.2026", "saat": "22:39", "yeni": 126, "kap": 185, "acik": 58, "delta": -59, "kartlar": [{"ad": "CDK SAVUNMA ELEKTRON\u0130K OTOMOT\u0130V \u0130N\u015e VE GIDA SANAY\u0130", "kap": 64, "acik": 15, "yeni": 26, "b": [9, 1, 1, 4]}, {"ad": "TERA SAVUNMA HAVACILIK SAN.T\u0130C.A.\u015e.", "kap": 49, "acik": 13, "yeni": 43, "b": [13, 0, 0, 0]}, {"ad": "T\u00dcZ\u00dcN SAVUNMA HAVACILIK VE UZAY TEK", "kap": 33, "acik": 3, "yeni": 14, "b": [3, 0, 0, 0]}, {"ad": "BEGA SAVUNMA VE HAVACILIK LTD \u015eT\u0130", "kap": 18, "acik": 0, "yeni": 10, "b": [0, 0, 0, 0]}, {"ad": "SAMM TEKNOLOJ\u0130 \u0130LET\u0130\u015e\u0130M SAN. VE T\u0130C", "kap": 8, "acik": 0, "yeni": 4, "b": [0, 0, 0, 0]}, {"ad": "\u0130MESTEK SAVUNMA HAVACILIK LTD.\u015eT\u0130", "kap": 4, "acik": 0, "yeni": 3, "b": [0, 0, 0, 0]}, {"ad": "UN\u0130COM \u00dcN\u0130VERSAL B\u0130L.H\u0130Z.T\u0130C. LTD.\u015e", "kap": 3, "acik": 0, "yeni": 0, "b": [0, 0, 0, 0]}, {"ad": "FD SAVUNMA VE ELEKTRON\u0130K SANAY\u0130 T\u0130C", "kap": 2, "acik": 5, "yeni": 5, "b": [5, 0, 0, 0]}, {"ad": "HAVELSAN TEKNOLOJ\u0130 RADAR SAN.T\u0130C.A.", "kap": 2, "acik": 0, "yeni": 1, "b": [0, 0, 0, 0]}, {"ad": "M\u0130LMAST Y\u00dcKSELTME S\u0130STEMLER\u0130 A.\u015e.", "kap": 2, "acik": 0, "yeni": 1, "b": [0, 0, 0, 0]}, {"ad": "Connecto Savunma ve Teknoloji A.\u015e.", "kap": 0, "acik": 17, "yeni": 14, "b": [17, 0, 0, 0]}, {"ad": "KAREL ELEKTRON\u0130K SAN.VE T\u0130C.A.\u015e.", "kap": 0, "acik": 5, "yeni": 5, "b": [5, 0, 0, 0]}]};</script><style>
+#gz-overlay{position:fixed;inset:0;background:rgba(16,27,45,.55);display:none;
+ align-items:flex-start;justify-content:center;z-index:99998;padding:22px 12px;
+ overflow:auto;-webkit-overflow-scrolling:touch}
+#gz-overlay.show{display:flex}
+.gz-panel{background:#EEF1F6;width:min(1000px,100%);overflow:hidden;
+ border:1px solid #E4E9F0}
+.gz-head{background:#131F36;color:#fff;padding:14px 20px 16px}
+.gz-top{display:flex;align-items:center}
+.gz-tt{display:flex;align-items:center;font-size:15px;font-weight:bold;color:#FFFFFF}
+.gz-dot{font-size:13px;color:#4ADE80;margin-right:7px;line-height:1}
+.gz-x{margin-left:auto;background:none;border:none;color:#AEB6C4;font-size:15px;
+ cursor:pointer;padding:2px 4px;line-height:1}
+.gz-x:hover{color:#fff}
+.gz-ts{font-size:12px;color:#7C8698;margin:3px 0 8px 22px}
+.gz-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:8px}
+.gz-kpi{background:#1E2B47;border:1px solid #2A3854;padding:8px 12px 8px}
+.gz-kpi .n{font-size:20px;font-weight:bold;font-variant-numeric:tabular-nums;line-height:1.15;text-align:left}
+.gz-kpi .l{font-size:8px;color:#8B96A8;margin-top:2px;font-weight:normal;letter-spacing:.2px}
+.gz-cnew .n{color:#FDE68A}.gz-cclosed .n{color:#6EE7B7}.gz-copen .n{color:#FCA5A5}
+.gz-body{padding:0 6px}
+.gz-lab{display:none;align-items:center;gap:8px;font-size:10px;font-weight:bold;
+ letter-spacing:.4px;color:#93A0B2;margin:12px 0 2px}
+.gz-lab::after{content:'';flex:1;height:1px;background:#E4E9F0}
+.gz-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;padding-bottom:6px}
+.gz-card{background:#FAFBFD;border:2px solid #E4E9F0;padding:8px 12px 0;display:flex;flex-direction:column}
+.gz-bok{border-color:#0EA355}.gz-bday1{border-color:#EAB308}.gz-bday2{border-color:#FF7A1A}.gz-bday3{border-color:#DC2626}
+.gz-name{font-size:12px;font-weight:bold;color:#101B2D;line-height:1.25;margin-bottom:4px;
+ overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gz-status{display:flex;flex-wrap:wrap;gap:2px 7px;min-height:17px;margin-bottom:1px}
+.gz-pair{display:inline-flex;align-items:center}
+.gz-box{font-size:9px;font-weight:bold;color:#fff;padding:1px 5px;white-space:nowrap}
+.gz-box.gz-ok{background:#0EA355}.gz-box.gz-d1{background:#EAB308}.gz-box.gz-d2{background:#FF7A1A}.gz-box.gz-d3{background:#DC2626}
+.gz-count{font-size:11px;font-weight:bold;margin-left:3px;white-space:nowrap}
+.gz-count.gz-ok{color:#0EA355}.gz-count.gz-d1{color:#EAB308}.gz-count.gz-d2{color:#FF7A1A}.gz-count.gz-d3{color:#DC2626}
+.gz-nums{display:flex;gap:20px;margin-top:5px}
+.gz-nb .n{font-size:17px;font-weight:bold;font-variant-numeric:tabular-nums;line-height:1}
+.gz-nb .l{font-size:8px;color:#93A0B2;font-weight:bold;margin-top:1px}
+.gz-okc{color:#0EA355}
+.gz-n.gz-day1{color:#EAB308}.gz-n.gz-day2{color:#FF7A1A}.gz-n.gz-day3{color:#DC2626}.gz-n.gz-ok{color:#101B2D}
+.gz-sep{height:1px;background:#E4E9F0;margin:6px 0 0}
+.gz-today{margin:3px 0 8px;font-size:9.5px;color:#93A0B2;display:block}
+.gz-today.has{color:#1832B8;font-weight:bold}
+.gz-foot{padding:12px 20px;display:flex;justify-content:flex-end}
+.gz-btn{background:#2C4BFF;color:#fff;border:none;padding:6px 28px;
+ font-size:12px;font-weight:bold;cursor:pointer;border-radius:0}
+.gz-btn:hover{background:#1832B8}
+@media(max-width:720px){
+ .gz-grid{gap:8px}.gz-body{padding:0 4px}
+ .gz-name{font-size:10.5px}.gz-count{font-size:9.5px}.gz-box{font-size:8px;padding:1px 4px}
+ .gz-nums{gap:12px}.gz-nb .n{font-size:15px}.gz-today{font-size:8.5px}
+ .gz-kpis{gap:7px}.gz-head{padding:10px 12px 12px}.gz-ts{margin-left:14px}
+}
+@media(max-width:480px){
+ #gz-overlay{padding:6px 4px}
+ .gz-head{padding:8px 10px 10px}.gz-tt{font-size:12px}.gz-ts{font-size:10px;margin:2px 0 6px 12px}
+ .gz-kpi{padding:5px 7px}.gz-kpi .n{font-size:15px}.gz-kpi .l{font-size:7px}
+ .gz-body{padding:0 3px}.gz-grid{gap:5px}
+ .gz-card{padding:6px 7px 0}
+ .gz-name{font-size:8.5px;margin-bottom:3px}
+ .gz-status{min-height:14px;gap:2px 4px}
+ .gz-box{font-size:7px;padding:1px 3px}.gz-count{font-size:8px;margin-left:2px}
+ .gz-nums{gap:8px;margin-top:4px}.gz-nb .n{font-size:13px}.gz-nb .l{font-size:6.5px}
+ .gz-sep{margin-top:4px}.gz-today{font-size:7.5px;margin:2px 0 6px}
+ .gz-lab{font-size:8.5px;margin:8px 0 2px}
+ .gz-foot{padding:8px 10px}.gz-btn{font-size:11px;padding:5px 18px}
+}
+</style><div id="gz-overlay" role="dialog" aria-modal="true">
+ <div class="gz-panel">
+  <div class="gz-head">
+   <div class="gz-top">
+    <span class="gz-dot">&#9679;</span>
+    <span class="gz-tt">G&#252;nl&#252;k Genel Durum &#214;zeti</span>
+    <button class="gz-x" id="gz-x">&#10005;</button>
+   </div>
+   <div class="gz-ts"><span id="gz-ts"></span></div>
+   <div class="gz-kpis">
+    <div class="gz-kpi gz-cnew"><div class="n" id="gz-k-new">0</div>
+     <div class="l">BUG&#220;N A&#199;ILAN TOPLAM TALEP</div></div>
+    <div class="gz-kpi gz-cclosed"><div class="n" id="gz-k-kap">0</div>
+     <div class="l">BUG&#220;N KAPATILAN TALEP</div></div>
+    <div class="gz-kpi gz-copen"><div class="n" id="gz-k-acik">0</div>
+     <div class="l">A&#199;IK TALEP</div></div>
+   </div>
+  </div>
+  <div class="gz-body">
+   <div class="gz-lab" id="gz-lab-crit">&#214;NCEL&#304;KL&#304; TEDAR&#304;K&#199;&#304;LER</div>
+   <div class="gz-grid" id="gz-grid-crit"></div>
+   <div class="gz-lab" id="gz-lab-rest">D&#304;&#286;ER TEDAR&#304;K&#199;&#304;LER</div>
+   <div class="gz-grid" id="gz-grid-rest"></div>
+  </div>
+  <div class="gz-foot"><button class="gz-btn" id="gz-btn">Kapat</button></div>
+ </div>
+</div><script>
+(function(){
+var D=window.OZET_DATA;if(!D||!D.kartlar||!D.kartlar.length)return;
+function gc(n){return n>=3?'day3':n===2?'day2':n===1?'day1':'ok'}
+function esc(s){return String(s).replace(/[&<>\"]/g,function(c){
+ return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+function adKisa(a){var s=String(a).split(/\s+/).slice(0,2).join(' ');
+ if(s.length>22)s=s.slice(0,21).replace(/\s+$/,'')+'...';return s;}
+var ts=document.getElementById('gz-ts');
+if(ts)ts.textContent=D.tarih+' \u2014 '+D.saat+"'ten itibaren";
+function set(id,v){var e=document.getElementById(id);if(e)e.textContent=v;}
+set('gz-k-new',D.yeni);set('gz-k-kap',D.kap);set('gz-k-acik',D.acik);
+var K=D.kartlar.slice().sort(function(a,b){return b.acik-a.acik;});
+var geciken=K.filter(function(k){return k.b[1]>0||k.b[2]>0||k.b[3]>0;});
+var kritik=geciken.length?geciken:K.slice(0,3);
+var sec={};kritik.forEach(function(k){sec[k.ad]=1;});
+var diger=K.filter(function(k){return !sec[k.ad];});
+function kartHTML(k){var worst=k.b[3]>0?3:k.b[2]>0?2:k.b[1]>0?1:0;
+ var chips='';
+ [[3,k.b[3]],[2,k.b[2]],[1,k.b[1]]].forEach(function(p){
+  if(p[1]>0)chips+='<span class="gz-pair"><span class="gz-box gz-d'+p[0]+'">+'+p[0]
+   +'</span><span class="gz-count gz-d'+p[0]+'">\u2192 '+p[1]+'</span></span>';});
+ if(!chips)chips='<span class="gz-box gz-ok">24 saat i\u00e7erisinde</span>';
+ var openCls=worst?('gz-day'+worst):'gz-ok';
+ var yeni=int0(k.yeni);
+  return '<div class="gz-card gz-b'+gc(worst)+'">'
+   +'<div class="gz-name">'+esc(adKisa(k.ad))
+   +(int0(k.acik)===0?'<span style="float:right;color:#0EA55E;font-size:18px;font-weight:bold">&#10003;</span>':'')
+   +'</div>'
+  +'<div class="gz-status">'+chips+'</div>'
+   +'<div class="gz-nums"><div class="gz-nb"><div class="n '+openCls+'">'+k.acik
+   +'</div><div class="l">A\u00c7IK</div></div>'
+   +'<div class="gz-nb"><div class="n gz-okc">'+k.kap
+   +'</div><div class="l">KAPATILAN</div></div></div>'
+  +'<div class="gz-sep"></div>'
+   +(yeni>0?'<div class="gz-today has">\u25cf Bug\u00fcn a\u00e7\u0131lan: '+yeni+'</div>'
+    :'<div class="gz-today">\u25cf Bug\u00fcn a\u00e7\u0131lan: '+yeni+')</div>')
+  +'</div>';}
+function int0(v){v=parseInt(v,10);return isNaN(v)?0:v;}
+function fill(id,arr,labelId){var g=document.getElementById(id),l=document.getElementById(labelId);
+ if(!arr.length){if(g)g.innerHTML='';if(l)l.style.display='none';return;}
+ if(l)l.style.display='flex';if(g)g.innerHTML=arr.map(kartHTML).join('');}
+fill('gz-grid-crit',kritik,'gz-lab-crit');
+fill('gz-grid-rest',diger,'gz-lab-rest');
+var ov=document.getElementById('gz-overlay');if(!ov)return;
+ov.classList.add('show');document.body.style.overflow='hidden';
+function kapa(){ov.classList.remove('show');document.body.style.overflow='';}
+var xb=document.getElementById('gz-x');if(xb)xb.onclick=kapa;
+var bb=document.getElementById('gz-btn');if(bb)bb.onclick=kapa;
+})();
 </script></body></html>
