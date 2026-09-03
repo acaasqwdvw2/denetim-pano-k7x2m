@@ -513,7 +513,7 @@ function render(){
  fill('gz-grid-rest',diger,'gz-lab-rest');
 }
 var fw=document.getElementById('gz-filter-wrap');
-if(TUR.length>1&&fw){fw.style.display='flex';
+if(TUR.length&&fw){fw.style.display='flex';
  var bo=document.getElementById('gz-fopts');
  function mkChk(t){
   var lab=document.createElement('label');lab.className='gz-fopt';
