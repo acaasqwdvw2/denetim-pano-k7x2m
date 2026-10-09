@@ -32,6 +32,7 @@ h1{font-size:19px;margin:0}
 .ciz{width:100%;overflow-x:auto;cursor:crosshair;position:relative;background:#fff;
      border:1px solid #EEF0F3;border-radius:8px}
 .ciz svg{display:block}
+.hafta-kaydir{width:100%;max-width:430px}
 .tabela{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;margin-top:6px;color:#374151}
 .tb{display:inline-flex;align-items:center;gap:5px}
 .nokta{width:10px;height:10px;border-radius:3px;display:inline-block}
@@ -40,7 +41,7 @@ h1{font-size:19px;margin:0}
 <div class="ust">
   <div>
     <h1>&#128200; Analiz Grafikleri</h1>
-    <div class="alt">Aylik trend &mdash; Son G&#252;ncelleme: 09.10.2026 13:35:38</div>
+    <div class="alt">Aylik trend &mdash; Son G&#252;ncelleme: 09.10.2026 13:41:59</div>
   </div>
   <div class="filt">
     <input id="ara" type="text" placeholder="&#128269; Tedarikçi ara... (bo&#351; = hepsi)" autocomplete="off"/>
@@ -51,8 +52,8 @@ h1{font-size:19px;margin:0}
 <div class="grafik-kutu">
   <div class="soll">
     <h2>Ayl&#305;k A&#231;&#305;k Talep / Kapat&#305;lan Talep Grafi&#287;i</h2>
-    <div class="ipucu">Fare ile &#252;zerinde gezdirin: de&#287;erler g&#246;r&#252;n&#252;r &bull; yatay kayd&#305;rarak ay&#305;n tamam&#305;na bak&#305;n</div>
-    <div class="ciz" id="c1"></div>
+    <div class="ipucu">Haftal&#305;k g&#246;r&#252;n&#252;m: yatay kayd&#305;rarak ay&#305;n tamam&#305;na bak&#305;n &bull; fare ile &#252;zerinde gezdirin: de&#287;erler g&#246;r&#252;n&#252;r</div>
+    <div class="ciz hafta-kaydir" id="c1"></div>
     <div class="tabela">
       <span class="tb"><i class="nokta" style="background:#2563EB"></i>A&#231;&#305;lan</span>
       <span class="tb"><i class="nokta" style="background:#16A34A"></i>Kapat&#305;lan</span>
@@ -69,11 +70,11 @@ h1{font-size:19px;margin:0}
 <div class="grid">
   <div class="kart-grafik">
     <h2>&#128200; Alan Grafi&#287;i: A&#231;&#305;lan / Kapat&#305;lan</h2>
-    <div class="ciz" id="ca"></div>
+    <div class="ciz hafta-kaydir" id="ca"></div>
   </div>
   <div class="kart-grafik">
     <h2>&#128200; K&#252;m&#252;latif: A&#231;&#305;lan / Kapat&#305;lan</h2>
-    <div class="ciz" id="ck"></div>
+    <div class="ciz hafta-kaydir" id="ck"></div>
   </div>
   <div class="kart-grafik">
     <h2>&#128199; Haftal&#305;k S&#252;tun (7 g&#252;n toplam&#305;)</h2>
@@ -135,6 +136,8 @@ function cizGunluk(id,seriler,opts){
   s.push('<g id="nd-'+id+'"></g>');
   s.push('<g id="bg-'+id+'"></g>');
   document.getElementById(id).innerHTML='<svg id="sv-'+id+'" viewBox="0 0 '+WW+' 170" style="width:'+WW+'px;max-width:none">'+s.join('')+'</svg>';
+  var kEl0=document.getElementById(id);
+  if(kEl0){kEl0.scrollLeft=kEl0.scrollWidth;}
   var svEl=document.getElementById('sv-'+id);
   svEl.addEventListener('mousemove',function(e){
     var r=svEl.getBoundingClientRect();
@@ -245,6 +248,8 @@ function guncelle(){
   cizEkstralar();
   durum=cizg([{d:sonData.a,renk:'#2563EB',gen:2},{d:sonData.k,renk:'#16A34A',gen:2}]);
   document.getElementById('c1').innerHTML='<svg id="gsvg" viewBox="0 0 '+W+' 170" style="width:'+W+'px;max-width:none">'+durum.s.join('')+'</svg>';
+  var c1El=document.getElementById('c1');
+  if(c1El){c1El.scrollLeft=c1El.scrollWidth;}
   svgEl=document.getElementById('gsvg');
   svgEl.addEventListener('mousemove', function(e){
     if(!durum)return;
