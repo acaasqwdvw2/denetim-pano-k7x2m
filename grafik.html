@@ -25,14 +25,15 @@ h1{font-size:19px;margin:0}
 .ort-baslik{font-size:12px;font-weight:bold;color:#374151;margin-bottom:4px}
 .ort-ad{font-size:11px;color:#6B7280;margin-top:8px;display:flex;align-items:center;gap:5px}
 .ort-sayi{font-size:24px;font-weight:bold;color:#111827;margin-top:2px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:14px;margin-top:16px}
-.kart-grafik{background:#fff;border:1px solid #E5E7EB;border-radius:12px;padding:12px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:16px}
+@media(max-width:720px){.grid{grid-template-columns:1fr}}
+.kart-grafik{background:#fff;border:1px solid #E5E7EB;border-radius:12px;padding:12px;min-width:0}
 .kart-grafik h2{font-size:13px;margin:0 0 6px;color:#1E293B}
 .ipucu{font-size:11px;color:#9CA3AF;margin:0 0 8px}
 .ciz{width:100%;overflow-x:auto;cursor:crosshair;position:relative;background:#fff;
      border:1px solid #EEF0F3;border-radius:8px}
 .ciz svg{display:block}
-.hafta-kaydir{width:100%;max-width:430px}
+.hafta-kaydir{width:100%;min-width:0}
 .tabela{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;margin-top:6px;color:#374151}
 .tb{display:inline-flex;align-items:center;gap:5px}
 .nokta{width:10px;height:10px;border-radius:3px;display:inline-block}
@@ -41,7 +42,7 @@ h1{font-size:19px;margin:0}
 <div class="ust">
   <div>
     <h1>&#128200; Analiz Grafikleri</h1>
-    <div class="alt">Aylik trend &mdash; Son G&#252;ncelleme: 09.10.2026 13:41:59</div>
+    <div class="alt">Aylik trend &mdash; Son G&#252;ncelleme: 09.10.2026 13:55:36</div>
   </div>
   <div class="filt">
     <input id="ara" type="text" placeholder="&#128269; Tedarikçi ara... (bo&#351; = hepsi)" autocomplete="off"/>
@@ -89,7 +90,7 @@ var g=document.getElementById('ara');
 var tem=document.getElementById('temizle');
 var cap=document.getElementById('secim');
 var n=Math.max(V.gunler.length,1);
-var XL=58,XR=28,US=16,AL=132,PW=46;
+var XL=58,XR=28,US=16,AL=165,PW=46;
 var W=XL+n*PW+XR;
 function norm(s){s=(s||'')+'';
   return s.toLowerCase().replace(/ı/g,'i').replace(/ğ/g,'g').replace(/ü/g,'u')
@@ -108,7 +109,7 @@ function ort(d){var t=0;for(var i=0;i<d.length;i++)t+=d[i];return Math.round(t/d
 function kume(d){var r=[],t=0;for(var i=0;i<d.length;i++){t+=d[i];r.push(t);}return r;}
 function cizGunluk(id,seriler,opts){
   opts=opts||{};
-  var XXL=58,XR2=28,US2=16,AL2=132,PW2=46;
+  var XXL=58,XR2=28,US2=16,AL2=165,PW2=46;
   var NN=n,WW=XXL+NN*PW2+XR2;
   var all=[].concat.apply([],seriler.map(function(S){return S.d;}));
   var mn=Math.min.apply(null,all),mx=Math.max.apply(null,all)*1.05;
@@ -129,13 +130,13 @@ function cizGunluk(id,seriler,opts){
     s.push('<polygon points="'+XXL+','+AL2+' '+p+' '+(WW-XR2)+','+AL2+'" fill="'+S.renk+'" opacity="0.15"/>');});}
   seriler.forEach(function(S){
     var p=S.d.map(function(v,i){return x(i).toFixed(0)+','+y(v).toFixed(0);}).join(' ');
-    s.push('<polyline points="'+p+'" fill="none" stroke="'+S.renk+'" stroke-width="2"/>');
-    for(var j=0;j<S.d.length;j++){s.push('<circle cx="'+x(j).toFixed(0)+'" cy="'+y(S.d[j]).toFixed(0)+'" r="1.8" fill="'+S.renk+'"/>');}
+    s.push('<polyline points="'+p+'" fill="none" stroke="'+S.renk+'" stroke-width="2.5"/>');
+    for(var j=0;j<S.d.length;j++){s.push('<circle cx="'+x(j).toFixed(0)+'" cy="'+y(S.d[j]).toFixed(0)+'" r="2.6" fill="'+S.renk+'"/>');}
   });
   s.push('<line id="kl-'+id+'" x1="0" y1="0" x2="0" y2="0" stroke="#9CA3AF" stroke-dasharray="4 3" opacity="0"/>');
   s.push('<g id="nd-'+id+'"></g>');
   s.push('<g id="bg-'+id+'"></g>');
-  document.getElementById(id).innerHTML='<svg id="sv-'+id+'" viewBox="0 0 '+WW+' 170" style="width:'+WW+'px;max-width:none">'+s.join('')+'</svg>';
+  document.getElementById(id).innerHTML='<svg id="sv-'+id+'" viewBox="0 0 '+WW+' 215" style="width:'+WW+'px;max-width:none">'+s.join('')+'</svg>';
   var kEl0=document.getElementById(id);
   if(kEl0){kEl0.scrollLeft=kEl0.scrollWidth;}
   var svEl=document.getElementById('sv-'+id);
@@ -165,7 +166,7 @@ function cizGunluk(id,seriler,opts){
   });
 }
 function cizHaftalik(id){
-  var hb=Math.ceil(n/7),XXL=58,XR2=28,US2=16,AL2=132;
+  var hb=Math.ceil(n/7),XXL=58,XR2=28,US2=16,AL2=165;
   var B=150,W2=XXL+hb*B+XR2;
   var mx=1,tops=[];
   for(var w=0;w<hb;w++){var sa=0,sk=0;
@@ -186,7 +187,7 @@ function cizHaftalik(id){
     s.push('<rect x="'+(c0-bw-1).toFixed(1)+'" y="'+y(T.sa).toFixed(1)+'" width="'+bw.toFixed(1)+'" height="'+(AL2-y(T.sa)).toFixed(1)+'" rx="2" fill="#2563EB"/>');
     s.push('<rect x="'+(c0+1).toFixed(1)+'" y="'+y(T.sk).toFixed(1)+'" width="'+bw.toFixed(1)+'" height="'+(AL2-y(T.sk)).toFixed(1)+'" rx="2" fill="#16A34A"/>');
   }
-  document.getElementById(id).innerHTML='<svg viewBox="0 0 '+W2+' 170" style="width:'+W2+'px;max-width:none">'+s.join('')+'</svg>';
+  document.getElementById(id).innerHTML='<svg viewBox="0 0 '+W2+' 215" style="width:'+W2+'px;max-width:none">'+s.join('')+'</svg>';
 }
 function cizEkstralar(){
   cizGunluk('ca',[{d:sonData.a.slice(),renk:'#2563EB',ad:'Açılan',txt:'#93C5FD'},
@@ -217,7 +218,7 @@ function cizg(seriler){
   seriler.forEach(function(S){
     var p=S.d.map(function(v,i){return x(i).toFixed(0)+','+y(v).toFixed(0);}).join(' ');
     s.push('<polyline points="'+p+'" fill="none" stroke="'+S.renk+'" stroke-width="'+S.gen+'"/>');
-    for(var j=0;j<S.d.length;j++){s.push('<circle cx="'+x(j).toFixed(0)+'" cy="'+y(S.d[j]).toFixed(0)+'" r="2.4" fill="'+S.renk+'" stroke="#fff" stroke-width="1"/>');}
+    for(var j=0;j<S.d.length;j++){s.push('<circle cx="'+x(j).toFixed(0)+'" cy="'+y(S.d[j]).toFixed(0)+'" r="3" fill="'+S.renk+'" stroke="#fff" stroke-width="1"/>');}
   });
   s.push('<line id="klavuz" x1="0" y1="0" x2="0" y2="0" stroke="#9CA3AF" stroke-dasharray="4 3" opacity="0"/>');
   s.push('<g id="noktalar"></g>');
@@ -247,7 +248,7 @@ function guncelle(){
   document.getElementById('ok').textContent=ort(sonData.k);
   cizEkstralar();
   durum=cizg([{d:sonData.a,renk:'#2563EB',gen:2},{d:sonData.k,renk:'#16A34A',gen:2}]);
-  document.getElementById('c1').innerHTML='<svg id="gsvg" viewBox="0 0 '+W+' 170" style="width:'+W+'px;max-width:none">'+durum.s.join('')+'</svg>';
+  document.getElementById('c1').innerHTML='<svg id="gsvg" viewBox="0 0 '+W+' 215" style="width:'+W+'px;max-width:none">'+durum.s.join('')+'</svg>';
   var c1El=document.getElementById('c1');
   if(c1El){c1El.scrollLeft=c1El.scrollWidth;}
   svgEl=document.getElementById('gsvg');
