@@ -30,7 +30,7 @@ svg{display:block}
 <div class="ust">
   <div>
     <h1>&#128200; Analiz Grafikleri</h1>
-    <div class="alt">Haftal&#305;k &amp; g&#252;nl&#252;k trendler &mdash; Son G&#252;ncelleme: 09.10.2026 15:12:02</div>
+    <div class="alt">Haftal&#305;k &amp; g&#252;nl&#252;k trendler &mdash; Son G&#252;ncelleme: 09.10.2026 15:21:59</div>
   </div>
   <div class="filt">
     <input id="ara" type="text" placeholder="&#128269; Tedarikçi ara... (boş = hepsi)" autocomplete="off"/>
@@ -89,6 +89,42 @@ function topla(adlar){var a=[],k=[];var n=Math.max(V.gunler.length,1);for(var i=
 function top7(d){var t=0,n=d.length;for(var i=Math.max(0,n-7);i<n;i++)t+=(d[i]||0);return t;}
 function prev7(d){var t=0,n=d.length;for(var i=Math.max(0,n-14);i<n-7;i++)t+=(d[i]||0);return t;}
 function yuzde(son,once){if(once>0)return Math.round((son-once)/once*1000)/10;return son>0?100:0;}
+function kolonGrafik(hedef,kats,vals,opt){
+  opt=opt||{};
+  var el=(typeof hedef==='string')?document.getElementById(hedef):hedef;
+  if(!el)return;
+  if(!kats.length){el.innerHTML='<div class="bos">Veri yok</div>';return;}
+  var n=kats.length,W=470,H=opt.h||236,L=46,R=14,T=18,B=opt.b||66;
+  var mx=Math.max.apply(null,vals.concat([opt.max||1]));
+  var mn=Math.min.apply(null,vals.concat([0]));
+  if(opt.signed){var a=1;for(var z=0;z<vals.length;z++)a=Math.max(a,Math.abs(vals[z]));mx=a;if(mx<1)mx=1;mn=-mx;}
+  if(opt.pozitif)mn=0;
+  if(mx===mn)mx=mn+1;
+  var ph=H-T-B;
+  function y(v){return T+(mx-v)/(mx-mn)*ph;}
+  var innerW=W-L-R,step=innerW/n,bw=Math.min(step*0.6,58);
+  function xc(i){return L+step*i+step/2;}
+  var h=['<svg viewBox="0 0 '+W+' '+H+'" style="width:100%">'];
+  for(var t=0;t<=4;t++){var vv=mn+(mx-mn)*t/4,yy=y(vv);
+    h.push('<line x1="'+L+'" y1="'+yy.toFixed(1)+'" x2="'+(W-R)+'" y2="'+yy.toFixed(1)+'" stroke="#EEF0F3"/>');
+    h.push('<text x="'+(L-6)+'" y="'+(yy+3).toFixed(1)+'" text-anchor="end" font-size="9" fill="#9CA3AF">'+(opt.fmt?opt.fmt(vv):Math.round(vv))+'</text>');}
+  var y0=y(0);
+  if(mn<0)h.push('<line x1="'+L+'" y1="'+y0.toFixed(1)+'" x2="'+(W-R)+'" y2="'+y0.toFixed(1)+'" stroke="#9CA3AF"/>');
+  for(var i=0;i<n;i++){
+    var v=vals[i],yv=y(v),top=Math.min(yv,y0),hgt=Math.max(1,Math.abs(yv-y0));
+    var c=opt.renkFn?opt.renkFn(v,i):'#2563EB';
+    h.push('<rect x="'+(xc(i)-bw/2).toFixed(1)+'" y="'+top.toFixed(1)+'" width="'+bw.toFixed(1)+'" height="'+hgt.toFixed(1)+'" rx="3" fill="'+c+'" opacity="0.92"/>');
+    var ly=(v>=0?top-4:top+hgt+11);
+    h.push('<text x="'+xc(i).toFixed(1)+'" y="'+ly.toFixed(1)+'" text-anchor="middle" font-size="9.5" font-weight="bold" fill="#374151">'+(opt.fmt?opt.fmt(v):v)+'</text>');
+    var lx=xc(i).toFixed(1),lyy=(H-B+13);
+    h.push('<text x="'+lx+'" y="'+lyy+'" text-anchor="end" font-size="9" fill="#6B7280" transform="rotate(-34 '+lx+' '+lyy+')">'+esc(kisa(kats[i],24))+'</text>');
+  }
+  h.push('<line x1="'+L+'" y1="'+T+'" x2="'+L+'" y2="'+(H-B)+'" stroke="#D1D5DB"/>');
+  h.push('<line x1="'+L+'" y1="'+(H-B)+'" x2="'+(W-R)+'" y2="'+(H-B)+'" stroke="#D1D5DB"/>');
+  if(opt.yBaslik){var yc=T+ph/2;h.push('<text x="11" y="'+yc+'" text-anchor="middle" font-size="9" fill="#9CA3AF" transform="rotate(-90 11 '+yc+')">'+opt.yBaslik+'</text>');}
+  h.push('</svg>');
+  el.innerHTML=(opt.ust||'')+h.join('');
+}
 function cizDegisim(adlar){
   var el=document.getElementById('k1');var elo=document.getElementById('k1o');if(!el)return;
   var rows=[];
@@ -106,24 +142,20 @@ function cizDegisim(adlar){
     if(azalan)cumle+=' En çok düşüş: <b>'+esc(kisa(azalan.ad,34))+'</b> (%'+azalan.pct+', '+azalan.onc+'&rarr;'+azalan.son+').';
     elo.innerHTML=cumle;
   }
-  rows.sort(function(x,y){return y.son-x.son;});
+  rows.sort(function(x,y){return Math.abs(y.pct)-Math.abs(x.pct);});
   var top=rows.slice(0,12);
-  var maxAbs=1;top.forEach(function(r){maxAbs=Math.max(maxAbs,Math.abs(r.pct));});
-  var W=460,nameW=150,rowH=22,gap=8,H=top.length*(rowH+gap)+4;
-  var half=(W-nameW-70)/2,cx=nameW+half;
-  var h=['<svg viewBox="0 0 '+W+' '+H+'" style="width:100%">'];
-  h.push('<line x1="'+cx+'" y1="0" x2="'+cx+'" y2="'+H+'" stroke="#D1D5DB"/>');
-  top.forEach(function(r,i){
-    var yy=i*(rowH+gap)+4;var bw=Math.abs(r.pct)/maxAbs*half;if(bw<1)bw=1;
-    var c=r.pct>0?'#DC2626':(r.pct<0?'#16A34A':'#9CA3AF');
-    var x=r.pct>=0?cx:cx-bw;
-    h.push('<text x="0" y="'+(yy+rowH*0.72)+'" font-size="10" fill="#374151">'+esc(kisa(r.ad,24))+'</text>');
-    h.push('<rect x="'+x.toFixed(1)+'" y="'+yy+'" width="'+bw.toFixed(1)+'" height="'+rowH+'" rx="3" fill="'+c+'" opacity="0.9"/>');
-    var lx=r.pct>=0?(cx+bw+5):(cx-bw-5);var anch=r.pct>=0?'start':'end';
-    h.push('<text x="'+lx.toFixed(1)+'" y="'+(yy+rowH*0.72)+'" text-anchor="'+anch+'" font-size="10" font-weight="bold" fill="'+c+'">%'+r.pct+'</text>');
-  });
-  h.push('</svg>');
-  el.innerHTML=h.join('');
+  if(rows.length===1){
+    var r0=rows[0];
+    kolonGrafik('k1',['Önceki hafta','Bu hafta'],[r0.onc,r0.son],
+      {fmt:function(v){return Math.round(v);},
+       renkFn:function(v,i){return i===1?'#2563EB':'#94A3B8';},yBaslik:'adet'});
+  }else{
+    kolonGrafik('k1',top.map(function(r){return r.ad;}),
+      top.map(function(r){return r.pct;}),
+      {signed:true,fmt:function(v){return '%'+(Math.round(v*10)/10);},
+       renkFn:function(v){return v>0?'#DC2626':(v<0?'#16A34A':'#9CA3AF');},
+       yBaslik:'% değişim'});
+  }
 }
 function cizKapatma(sonData){
   var el=document.getElementById('k2');if(!el)return;
@@ -176,46 +208,27 @@ function sektorSerileri(){
   return satirSeri(arr);
 }
 function cizSektorKapatma(){
-  var el=document.getElementById('k5');if(!el)return;
   var liste=(V.sektor||[]).filter(function(s){return s.toplam>0;}).slice();
-  if(!liste.length){el.innerHTML='<div class="bos">Veri yok</div>';return;}
+  if(!liste.length){document.getElementById('k5').innerHTML='<div class="bos">Veri yok</div>';return;}
   liste.sort(function(a,b){return b.kapatma-a.kapatma;});
-  liste=liste.slice(0,12);
-  var W=460,nameW=150,rowH=22,gap=8,H=liste.length*(rowH+gap)+4,barMax=W-nameW-72;
-  var h=['<svg viewBox="0 0 '+W+' '+H+'" style="width:100%">'];
-  liste.forEach(function(s,i){
-    var yy=i*(rowH+gap)+4;var bw=Math.max(2,barMax*(s.kapatma/100));
-    var c=s.kapatma>=60?'#16A34A':(s.kapatma>=30?'#F59E0B':'#DC2626');
-    h.push('<text x="0" y="'+(yy+rowH*0.72)+'" font-size="10" fill="#374151">'+esc(kisa(s.ad,24))+'</text>');
-    h.push('<rect x="'+nameW+'" y="'+yy+'" width="'+bw.toFixed(1)+'" height="'+rowH+'" rx="4" fill="'+c+'" opacity="0.9"/>');
-    h.push('<text x="'+(nameW+bw+6).toFixed(1)+'" y="'+(yy+rowH*0.72)+'" font-size="10" font-weight="bold" fill="#111827">%'+s.kapatma+'</text>');
-    h.push('<text x="'+(W-2)+'" y="'+(yy+rowH*0.72)+'" text-anchor="end" font-size="9" fill="#9CA3AF">'+s.kapatilan+'/'+s.toplam+'</text>');
-  });
-  h.push('</svg>');
-  el.innerHTML=h.join('');
+  kolonGrafik('k5',liste.map(function(s){return s.ad;}),
+    liste.map(function(s){return s.kapatma;}),
+    {max:100,fmt:function(v){return Math.round(v)+'%';},
+     renkFn:function(v){return v>=60?'#16A34A':(v>=30?'#F59E0B':'#DC2626');},
+     yBaslik:'kapatma %'});
 }
 function cizDonus(adlar){
-  var el=document.getElementById('k6');if(!el)return;
   var rows=[],tn=0,tc=0;
   adlar.forEach(function(ad){var d=V.donus&&V.donus[ad];if(!d)return;rows.push({ad:ad,v:d[0],n:d[1]});tn+=d[0]*d[1];tc+=d[1];});
-  if(!rows.length){el.innerHTML='<div class="bos">Veri yok</div>';return;}
+  if(!rows.length){document.getElementById('k6').innerHTML='<div class="bos">Veri yok</div>';return;}
   var genel=tc>0?Math.round(tn/tc*10)/10:0;
   rows.sort(function(a,b){return b.v-a.v;});
   var top=rows.slice(0,12);
-  var W=460,nameW=150,rowH=22,gap=8,H=top.length*(rowH+gap)+4,barMax=W-nameW-80;
-  var mxv=1;top.forEach(function(r){mxv=Math.max(mxv,r.v);});
-  var h=['<div class="buyuk">'+genel+' <span>gün</span></div>'];
-  h.push('<svg viewBox="0 0 '+W+' '+H+'" style="width:100%">');
-  top.forEach(function(r,i){
-    var yy=i*(rowH+gap)+4;var bw=Math.max(2,barMax*(r.v/mxv));
-    var c=r.v>=2?'#DC2626':(r.v>=1?'#F59E0B':'#16A34A');
-    h.push('<text x="0" y="'+(yy+rowH*0.72)+'" font-size="10" fill="#374151">'+esc(kisa(r.ad,24))+'</text>');
-    h.push('<rect x="'+nameW+'" y="'+yy+'" width="'+bw.toFixed(1)+'" height="'+rowH+'" rx="4" fill="'+c+'" opacity="0.9"/>');
-    h.push('<text x="'+(nameW+bw+6).toFixed(1)+'" y="'+(yy+rowH*0.72)+'" font-size="10" font-weight="bold" fill="#111827">'+r.v+' g</text>');
-    h.push('<text x="'+(W-2)+'" y="'+(yy+rowH*0.72)+'" text-anchor="end" font-size="9" fill="#9CA3AF">'+r.n+' talep</text>');
-  });
-  h.push('</svg>');
-  el.innerHTML=h.join('');
+  kolonGrafik('k6',top.map(function(r){return r.ad;}),
+    top.map(function(r){return r.v;}),
+    {fmt:function(v){return (Math.round(v*10)/10)+'g';},
+     renkFn:function(v){return v>=2?'#DC2626':(v>=1?'#F59E0B':'#16A34A');},
+     ust:'<div class="buyuk">'+genel+' <span>gün</span></div>',yBaslik:'gün'});
 }
 function guncelle(){
   var ks=keysT();
