@@ -38,7 +38,7 @@ svg{display:block}
 <div class="ust">
   <div>
     <h1>&#128200; Analiz Grafikleri</h1>
-    <div class="alt">G&#252;nl&#252;k trendler (son 30 g&#252;n) &mdash; Son G&#252;ncelleme: 12.10.2026 11:26:34</div>
+    <div class="alt">G&#252;nl&#252;k trendler (son 30 g&#252;n) &mdash; Son G&#252;ncelleme: 12.10.2026 11:41:43</div>
   </div>
   <div class="filt">
     <input id="ara" type="text" placeholder="&#128269; Tedarikçi ara... (boş = hepsi)" autocomplete="off"/>
@@ -151,6 +151,12 @@ function cizTrendCok(hedef,etiketler,seriler,opt){
   h.push('<line x1="'+L+'" y1="'+T+'" x2="'+L+'" y2="'+(H-B)+'" stroke="#D1D5DB"/>');
   h.push('<line x1="'+L+'" y1="'+(H-B)+'" x2="'+(W-R)+'" y2="'+(H-B)+'" stroke="#D1D5DB"/>');
   if(opt.yBaslik){var yc=T+ph/2;h.push('<text x="11" y="'+yc+'" text-anchor="middle" font-size="9" fill="#9CA3AF" transform="rotate(-90 11 '+yc+')">'+opt.yBaslik+'</text>');}
+  h.push('<line class="cize-guide" x1="0" y1="'+T+'" x2="0" y2="'+(H-B)+'" stroke="#9CA3AF" stroke-width="1" stroke-dasharray="3 3" style="display:none"/>');
+  for(i=0;i<n;i++){
+    var zl=(i===0)?L:((x(i-1)+x(i))/2);
+    var zr=(i===n-1)?(W-R):((x(i)+x(i+1))/2);
+    h.push('<rect class="hz" data-i="'+i+'" x="'+zl.toFixed(1)+'" y="'+T+'" width="'+Math.max(1,(zr-zl)).toFixed(1)+'" height="'+ph+'" fill="#000" fill-opacity="0" pointer-events="all"/>');
+  }
   h.push('</svg>');
   var lg='<div class="efsane">';
   seriler.forEach(function(S){
@@ -158,7 +164,34 @@ function cizTrendCok(hedef,etiketler,seriler,opt){
     if(S.ort){var avg=(S.ortVal!=null)?S.ortVal:ortala(S.d);lg+='<span class="tb" style="color:#9CA3AF">ort. '+fnum(avg)+'</span>';}
   });
   lg+='</div>';
-  el.innerHTML=h.join('')+lg+(opt.alt?('<div class="t-alt">'+opt.alt+'</div>'):'');
+  var tipHtml='<div class="cize-tip" style="position:absolute;pointer-events:none;display:none;background:rgba(17,24,39,.94);color:#fff;font-size:11px;line-height:1.55;padding:6px 9px;border-radius:6px;white-space:nowrap;z-index:5;box-shadow:0 4px 12px rgba(0,0,0,.28);transform:translate(-50%,-118%)"></div>';
+  el.innerHTML=h.join('')+lg+(opt.alt?('<div class="t-alt">'+opt.alt+'</div>'):'')+tipHtml;
+  el.style.position='relative';
+  var _svg=el.querySelector('svg'),_tip=el.querySelector('.cize-tip');
+  if(_svg&&_tip){
+    var _guide=_svg.querySelector('.cize-guide');
+    var _hz=_svg.querySelectorAll('.hz');
+    var _bind=function(z){
+      z.addEventListener('mousemove',function(e){
+        var i=parseInt(z.getAttribute('data-i'),10);
+        var parts=['<div style="font-weight:bold;margin-bottom:3px">'+esc(etiketler[i])+'</div>'];
+        for(var s=0;s<seriler.length;s++){
+          parts.push('<div><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:'+seriler[s].renk+';margin-right:5px"></span>'+esc(seriler[s].ad)+': <b>'+fnum(seriler[s].d[i]||0)+'</b></div>');
+        }
+        _tip.innerHTML=parts.join('');
+        var r=el.getBoundingClientRect();
+        _tip.style.display='block';
+        _tip.style.left=(e.clientX-r.left)+'px';
+        _tip.style.top=(e.clientY-r.top)+'px';
+        if(_guide){_guide.setAttribute('x1',x(i).toFixed(1));_guide.setAttribute('x2',x(i).toFixed(1));_guide.style.display='inline';}
+      });
+      z.addEventListener('mouseleave',function(){
+        _tip.style.display='none';
+        if(_guide)_guide.style.display='none';
+      });
+    };
+    for(var zi=0;zi<_hz.length;zi++)_bind(_hz[zi]);
+  }
 }
 function donusKart(hedef,S,n){
   var el=document.getElementById(hedef);if(!el)return;
