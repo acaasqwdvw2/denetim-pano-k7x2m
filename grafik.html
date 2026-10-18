@@ -45,7 +45,7 @@ svg{display:block}
 <div class="ust">
   <div>
     <h1>&#128200; Analiz Grafikleri</h1>
-    <div class="alt">G&#252;nl&#252;k trendler (son 30 g&#252;n) &mdash; Son G&#252;ncelleme: 18.10.2026 16:09:05</div>
+    <div class="alt">G&#252;nl&#252;k trendler (son 30 g&#252;n) &mdash; Son G&#252;ncelleme: 18.10.2026 16:13:19</div>
   </div>
   <div class="filt">
     <input id="ara" type="text" placeholder="&#128269; Tedarikçi ara... (boş = hepsi)" autocomplete="off"/>
@@ -53,7 +53,6 @@ svg{display:block}
   </div>
 </div>
 <div class="secim" id="secim"></div>
-            '<div class="grafik-kart"><div class="bolum-baslik">🏅 FTY ÖZETİ <span id="fty-tur-ad" class="fte-not"></span></div><div class="fte-grid"><div class="fte-bolum"><h3>✅ En İyi 5 Firma <span class="fte-not">(200+ sonuçlanmış denetim)</span></h3><div id="fty-iyi"></div></div><div class="fte-bolum"><h3>⚠️ En Kötü 5 Firma <span class="fte-not">(50+ sonuçlanmış denetim)</span></h3><div id="fty-kotu"></div></div></div></div>'
 <div class="grid">
   <div class="kart-grafik">
     <h2>&#128200; A&#231;&#305;lan &amp; Kapat&#305;lan Talep Trendi</h2>
@@ -321,35 +320,4 @@ g.addEventListener('input',function(){guncelle();});
 tem.addEventListener('click',function(){g.value='';guncelle();g.focus();});
 guncelle();
 })();
-
-function ftyDoldur(){
-  var iyi=document.getElementById('fty-iyi');
-  var kotu=document.getElementById('fty-kotu');
-  if(!iyi||!kotu) return;
-  var escf=function(s){return (s==null?'':(''+s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');};
-  var V=window.ANALIZ_VERI||{};
-  var F=V.fte||{};
-  var ut=window.USER_TURLER||{};
-  var ad=null;try{ad=localStorage.getItem("PANO_GIRIS_AD");}catch(e){}
-  var iz=[];
-  if(ad){for(var k in ut){if((''+k).toLowerCase()===(''+ad).toLowerCase()){iz=(ut[k]||[]).slice();break;}}}
-  var key=iz.length?iz.slice().sort().join("|"):"Hepsi";
-  var d=F[key]||F["Hepsi"]||{iyi:[],kotu:[]};
-  var lbl=document.getElementById('fty-tur-ad');
-  if(lbl){
-    if(iz.length===1){lbl.textContent='— '+iz[0];}
-    else if(iz.length>1){lbl.textContent='— '+iz.join(', ');}
-    else{lbl.textContent='— Tümü';}
-  }
-  function satirlar(arr){
-    if(!arr||!arr.length) return '<div class="bos">Veri yok</div>';
-    return arr.map(function(r){
-      var ad2=r[0], y=r[1], t=(''+y).replace('.',',');
-      return '<div class="fte-satir"><span>'+escf(ad2)+'</span><span class="fte-yuzde">%'+t+'</span></div>';
-    }).join('');
-  }
-  iyi.innerHTML=satirlar(d.iyi);
-  kotu.innerHTML=satirlar(d.kotu);
-}
-ftyDoldur();
 </script></body></html>
