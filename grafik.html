@@ -45,7 +45,7 @@ svg{display:block}
 <div class="ust">
   <div>
     <h1>&#128200; Analiz Grafikleri</h1>
-    <div class="alt">G&#252;nl&#252;k trendler (son 30 g&#252;n) &mdash; Son G&#252;ncelleme: 22.10.2026 00:08:37</div>
+    <div class="alt">G&#252;nl&#252;k trendler (son 30 g&#252;n) &mdash; Son G&#252;ncelleme: 22.10.2026 00:30:42</div>
   </div>
   <div class="filt">
     <select id="birim-sec" style="display:none;font-size:13px;padding:9px 12px;border:1px solid #D1D5DB;border-radius:9px;max-width:260px">
@@ -105,13 +105,14 @@ function birimYonetici(){
   return ad && (''+ad).toLowerCase()==='yonetici';
 }
 if(birimYonetici() && birimSel){
-  var opts={};
-  Object.keys(VT).forEach(function(k){ if(k) opts[k]=1; });
-  Object.keys(opts).sort().forEach(function(x){
-    var o=document.createElement('option');
-    o.value=x; o.textContent=x; birimSel.appendChild(o);
+  var fixed=['Kablaj','EMM','Mekanik Denetim'];
+  fixed.forEach(function(x){
+    if(VT[x]){
+      var o=document.createElement('option');
+      o.value=x; o.textContent=x; birimSel.appendChild(o);
+    }
   });
-  birimSel.style.display='inline-block';
+  if(birimSel.options.length > 1) birimSel.style.display='inline-block';
 }
 function izinliTurler(){
   var ut=window.USER_TURLER||{};
