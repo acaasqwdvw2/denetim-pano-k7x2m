@@ -45,7 +45,7 @@ svg{display:block}
 <div class="ust">
   <div>
     <h1>&#128200; Analiz Grafikleri</h1>
-    <div class="alt">G&#252;nl&#252;k trendler (son 30 g&#252;n) &mdash; Son G&#252;ncelleme: 03.11.2026 21:30:31</div>
+    <div class="alt">G&#252;nl&#252;k trendler (son 30 g&#252;n) &mdash; Son G&#252;ncelleme: 03.11.2026 21:44:32</div>
   </div>
   <div class="filt">
     <select id="birim-sec" style="display:none;font-size:13px;padding:9px 12px;border:1px solid #D1D5DB;border-radius:9px;max-width:260px">
@@ -63,9 +63,9 @@ svg{display:block}
     <div id="k1"></div>
   </div>
   <div class="kart-grafik">
-    <h2>&#9881;&#65039; Kapatma H&#305;z&#305; Trendi</h2>
-    <div class="ipucu">G&#252;nl&#252;k kapat&#305;lan / a&#231;&#305;lan oran&#305; (%) &bull; kesikli: ortalama</div>
-    <div id="k2"></div>
+    <h2>&#128197; Ortalama D&#246;n&#252;&#351; S&#252;resi</h2>
+    <div class="ipucu">Talep olu&#351;turma &rarr; tamamlanma s&#252;resi</div>
+    <div id="k5"></div>
   </div>
   <div class="kart-grafik">
     <h2>&#127981; Uygunsuzluk Trendi</h2>
@@ -76,11 +76,6 @@ svg{display:block}
     <h2>&#128201; Uygunsuzluk Oran&#305; Trendi</h2>
     <div class="ipucu">G&#252;nl&#252;k uygunsuz / kapat&#305;lan oran&#305; (%) &bull; kesikli: ortalama</div>
     <div id="k4"></div>
-  </div>
-  <div class="kart-grafik">
-    <h2>&#128197; Ortalama D&#246;n&#252;&#351; S&#252;resi</h2>
-    <div class="ipucu">Talep olu&#351;turma &rarr; tamamlanma s&#252;resi</div>
-    <div id="k5"></div>
   </div>
   <div class="kart-grafik">
     <h2>&#127970; Sekt&#246;r De&#287;erlendirmesi</h2>
@@ -295,7 +290,7 @@ function sektorSatirlari(q,adlar){
   return all.filter(function(r){return set[r.ad];});
 }
 function guncelle(){
-  var idler=['k1','k2','k3','k4','k5','k6'];
+  var idler=['k1','k3','k4','k5','k6'];
   var ks=keysT();
   if(!ks.length){
     cap.textContent='Henüz trend verisi yok.';
@@ -328,8 +323,6 @@ function guncelle(){
     {ad:'Kapatılan',d:S.k,renk:'#16A34A',ort:true}
   ],{yBaslik:'adet',fmt:adet,
      alt:'Toplam açılan '+sumr(S.a)+' • kapatılan '+sumr(S.k)+' • ort. açılan '+ap+' / kapatılan '+kp});
-  cizTrendCok('k2',L,[{ad:'Kapatma hızı',d:kapHiz,renk:'#7C3AED',ort:true,ortVal:oh}],
-    {yBaslik:'%',fmt:pctT,alt:'Ortalama hız %'+oh+' • son gün %'+(kapHiz[n-1]||0)});
   cizTrendCok('k3',L,[{ad:'Uygunsuzluk',d:S.ug,renk:'#DC2626',ort:true}],
     {yBaslik:'adet',fmt:adet,alt:'Toplam '+sumr(S.ug)+' • ortalama '+(Math.round(ortala(S.ug)*10)/10)});
   cizTrendCok('k4',L,[{ad:'Uygunsuzluk oranı',d:ugOran,renk:'#EA580C',ort:true,ortVal:ook}],
