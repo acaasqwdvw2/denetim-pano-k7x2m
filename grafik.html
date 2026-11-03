@@ -328,8 +328,7 @@ function guncelle(){
     {ad:'Kapatılan',d:S.k,renk:'#16A34A',ort:true}
   ],{yBaslik:'adet',fmt:adet,
      alt:'Toplam açılan '+sumr(S.a)+' • kapatılan '+sumr(S.k)+' • ort. açılan '+ap+' / kapatılan '+kp});
-  cizTrendCok('k2',L,[{ad:'Kapatma hızı',d:kapHiz,renk:'#7C3AED',ort:true,ortVal:oh}],
-    {yBaslik:'%',fmt:pctT,alt:'Ortalama hız %'+oh+' • son gün %'+(kapHiz[n-1]||0)});
+  var _k2=document.getElementById('k2'); if(_k2 && _k2.parentNode){ _k2.parentNode.style.display='none'; }
   cizTrendCok('k3',L,[{ad:'Uygunsuzluk',d:S.ug,renk:'#DC2626',ort:true}],
     {yBaslik:'adet',fmt:adet,alt:'Toplam '+sumr(S.ug)+' • ortalama '+(Math.round(ortala(S.ug)*10)/10)});
   cizTrendCok('k4',L,[{ad:'Uygunsuzluk oranı',d:ugOran,renk:'#EA580C',ort:true,ortVal:ook}],
