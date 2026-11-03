@@ -1244,4 +1244,38 @@ grup_etiketler.forEach(function(el){
  try{ad=localStorage.getItem(KA)||'';}catch(e){}
  if(ad&&!GRUP.sirada){GRUP.ad=ad;grupAra(1);grupYukle();}
 })();
-</script></body></html>
+</script><script>
+(function(){
+  function kapatHataModal(){
+    var sels = ['#hataModal','.hata-modal','#uygunDegilModal','.uygun-degil-modal','#detayModal','.detay-modal','.modal-pencere'];
+    sels.forEach(function(s){
+      try{
+        document.querySelectorAll(s).forEach(function(m){
+          m.style.display='none';
+          m.classList.remove('show','acik','aktif');
+        });
+      }catch(e){}
+    });
+    try{ document.querySelectorAll('.modal-overlay').forEach(function(o){ o.style.display='none'; }); }catch(e){}
+  }
+  document.addEventListener('click', function(e){
+    var t = e.target;
+    if(!t) return;
+    var txt = (t.textContent||'').trim();
+    var id  = (t.id||'').toLowerCase();
+    var cls = (t.className||'').toString().toLowerCase();
+    if(txt==='×' || txt==='x' || id.indexOf('kapat')>=0 || cls.indexOf('kapat')>=0 || t.getAttribute('data-kapat')){
+      kapatHataModal();
+      return;
+    }
+    if(t.classList && t.classList.contains('modal-overlay')){
+      kapatHataModal();
+      return;
+    }
+  }, true);
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape'){ kapatHataModal(); }
+  });
+})();
+</script>
+</body></html>
