@@ -1083,6 +1083,25 @@ if(window.PANO_AKTIF_KULL){window.panoGrupKullanici(window.PANO_AKTIF_KULL);}
 function detayAcAd(ad){
  var d=PANO.saticilar[ad];if(!d)return;
  var dv=seciliVeri(ad)||d;
+ var _dg=d.gunluk||[],_dh=d.haftalik||[];
+ try{
+  if(AKTIF_TURLER&&d.tur_ozet){
+   var _gm={},_hm={};
+   AKTIF_TURLER.forEach(function(t){var to=d.tur_ozet[t];if(!to)return;
+    (to.gunluk||[]).forEach(function(x){var k=x.t;
+     if(!_gm[k])_gm[k]={t:k,adet:0,uygunsuz:0};
+     _gm[k].adet+=(x.adet||0);_gm[k].uygunsuz+=(x.uygunsuz||0);});
+    (to.haftalik||[]).forEach(function(x){var k=x.h;
+     if(!_hm[k])_hm[k]={h:k,toplam:0,uygunsuz:0,acilan:0};
+     _hm[k].toplam+=(x.toplam||0);_hm[k].uygunsuz+=(x.uygunsuz||0);_hm[k].acilan+=(x.acilan||0);});});
+   var _gl=Object.keys(_gm).map(function(k){return _gm[k];});
+   _gl.sort(function(a,b){var pa=a.t.split('.').reverse().join('-'),pb=b.t.split('.').reverse().join('-');return pa<pb?-1:(pa>pb?1:0);});
+   if(_gl.length)_dg=_gl;
+   var _hl=Object.keys(_hm).map(function(k){return _hm[k];});
+   _hl.sort(function(a,b){return a.h<b.h?-1:(a.h>b.h?1:0);});
+   if(_hl.length)_dh=_hl;
+  }
+ }catch(e){}
  ipGizle();
  var gl=d.gunluk||[];
  var gOrt=gl.length?(gl.reduce(function(a,b){return a+b.adet;},0)/gl.length).toFixed(1):'-';
@@ -1100,8 +1119,8 @@ document.getElementById('md-kpi').innerHTML=
    +rozetYap('Uygun Değil: '+dv.uygun_degil,'#F97316');
  document.getElementById('modal').classList.add('acik');
  if(window.Plotly){
-  var gt=d.gunluk.map(function(x){return x.t;});
-  var ga=d.gunluk.map(function(x){return x.adet;});
+  var gt=_dg.map(function(x){return x.t;});
+  var ga=_dg.map(function(x){return x.adet;});
   var ort=ga.length?ga.reduce(function(a,b){return a+b;},0)/ga.length:0;
   Plotly.newPlot('md-gunluk',[
    {x:gt,y:ga,type:'scatter',mode:'lines+markers',name:'Kapatılan',
@@ -1114,14 +1133,14 @@ document.getElementById('md-kpi').innerHTML=
     xaxis:{tickangle:-45,automargin:true},title:{text:'Günlük Kapatılan Adetler'}},
    {responsive:true,displayModeBar:false,scrollZoom:false});
   Plotly.newPlot('md-hafta',[
-   {x:d.haftalik.map(function(x){return x.h;}),
-    y:d.haftalik.map(function(x){return x.toplam;}),
+   {x:_dh.map(function(x){return x.h;}),
+    y:_dh.map(function(x){return x.toplam;}),
     type:'bar',name:'Toplam Kapatılan',marker:{color:'#3B82F6'}},
-   {x:d.haftalik.map(function(x){return x.h;}),
-    y:d.haftalik.map(function(x){return x.uygunsuz;}),
+   {x:_dh.map(function(x){return x.h;}),
+    y:_dh.map(function(x){return x.uygunsuz;}),
     type:'bar',name:'Uygun Değil',marker:{color:'#EF4444'}},
-   {x:d.haftalik.map(function(x){return x.h;}),
-    y:d.haftalik.map(function(x){return x.acilan||0;}),
+   {x:_dh.map(function(x){return x.h;}),
+    y:_dh.map(function(x){return x.acilan||0;}),
     type:'bar',name:'Açılan Talep',marker:{color:'#22C55E'}}],
    {barmode:'group',autosize:true,height:320,dragmode:false,
     margin:{t:36,b:80,l:42,r:10},
@@ -1140,7 +1159,9 @@ title:{text:'Haftalık Kapatılan / Uygun Olmayan'}},
  var th=PANO.ham_kolonlar.map(function(c){return '<th>'+escT(c)+'</th>';}).join('');
  var _ys=d.acik_yas||[];
  var _sk=(typeof SK_FILTRE==='string')?SK_FILTRE:'hepsi';
+ var _turIx=PANO.ham_kolonlar.indexOf('Denetim Türü');
  var tb=d.acik_satirlar.map(function(rw,idx){
+  if(AKTIF_TURLER&&_turIx>=0&&_turIx<rw.length&&AKTIF_TURLER.indexOf(String(rw[_turIx]).trim())<0)return '';
   if(_sk!=='hepsi'&&(_ys[idx]||'s24')!==_sk)return '';
   return '<tr>'+rw.map(function(cv){return '<td>'+escT(cv)+'</td>';}).join('')+'</tr>';
  }).join('');
@@ -1192,6 +1213,10 @@ function udAc(ad,hf){
  UD_AD=ad;UD_HF=hf;
  UD_SAT=(d.uygun_degil_hafta&&d.uygun_degil_hafta[hf])||[];
  var kols=d.hafta_kolonlar||[];
+ if(AKTIF_TURLER){
+  var _ui=kols.indexOf('Denetim Türü');
+  if(_ui>=0)UD_SAT=UD_SAT.filter(function(rw){return rw&&_ui<rw.length&&AKTIF_TURLER.indexOf(String(rw[_ui]).trim())>=0;});
+ }
  document.getElementById('ud-baslik').textContent=ad+' — '+hf;
  var nt=document.getElementById('ud-not');
  nt.innerHTML='Toplam Hata: <b>'+UD_SAT.length+'</b> &nbsp;|&nbsp; '
