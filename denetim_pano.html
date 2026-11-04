@@ -301,16 +301,10 @@ function alanAdUygun(ad){
   if(AKTIF_TURLER){
    var d=PANO.saticilar[ad]||{};var to=d.tur_ozet||{};
    var i,tl=d.turler||[];
-   /* KATI SAHIPKIK: tedarikci, tum is turleri kullanici yetkisi icinde
-      kaliyorsa gorunur. Ornek: ASELSANNET (EMM+Elektriksel Test+Kaplama+
-      Kart Dizgi+Mekanik Denetim) yalniz Mekanik yetkilisi tarafindan
-      GOREILEMEZ; tum turleri kapsayan kullanici gorebilir. */
-   var turset=[];
-   if(tl&&tl.length){for(i=0;i<tl.length;i++)turset.push(tl[i]);}
-   for(var tk in to){if(turset.indexOf(tk)<0)turset.push(tk);}
-   if(!turset.length)return false;
-   for(i=0;i<turset.length;i++){if(AKTIF_TURLER.indexOf(turset[i])<0)return false;}
-   return true;}
+   // Once gercel tur ozeti, yoksa tedarikcinin tur listesi (yanlis gizlemeyi onler)
+   for(i=0;i<AKTIF_TURLER.length;i++){if(to[AKTIF_TURLER[i]])return true;}
+   for(i=0;i<AKTIF_TURLER.length;i++){if(tl.indexOf(AKTIF_TURLER[i])>-1)return true;}
+   return false;}
   if(!SECILI_ALAN)return true;
   return !!seciliVeri(ad);}
 function alanButonGuncelle(){
