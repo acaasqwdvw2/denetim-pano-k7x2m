@@ -394,8 +394,18 @@ function yeniUyari(){
  for(var ui=0;ui<U.length;ui++){var u=U[ui];
   if(!gset[u.ad])continue;
   if(ARAMA&&norm(u.ad).indexOf(ARAMA)<0)continue;
+  /* Kullanici görünürlügü: tedarikcinin kullaniciya görünen acik
+     talebi yoksa uyarı gösterilmez; sayilar kullanici turlerine göre */
+  var uv=seciliVeri(u.ad);
+  if(!uv||!kartGosterilir(uv))continue;
+  var umsj=u.msj;
+  if(u.s===2){if((uv.acik||0)<20)continue;
+   umsj=umsj.replace(/\(\d+\)/,'('+(uv.acik||0)+')');}
+  else if(u.s===1){if((uv.guncel24||0)<10)continue;
+   umsj=umsj.replace(/\(\d+\)/,'('+(uv.guncel24||0)+')');}
+  else if(u.s===3){if((uv.gun3||0)<=0)continue;}
   h+='<li><span class="uyari-rozet" style="background:'+(rk[u.s]||'#9CA3AF')+'">'
-    +(sepk[u.s]||'Bilgi')+'</span><span class="uyari-msj">'+u.msj+'</span></li>';}
+    +(sepk[u.s]||'Bilgi')+'</span><span class="uyari-msj">'+umsj+'</span></li>';}
  if(!h){ul.innerHTML='';tm.style.display='block';
   tm.textContent=ARAMA?'🔍 Aramaya uyan tedarikçi için uyarı yok.':'✅ Yetkili olduğunuz firmalar kapsamında uyarı yok.';return;}
  tm.style.display='none';ul.innerHTML=h;}
