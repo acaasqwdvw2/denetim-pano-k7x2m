@@ -142,7 +142,7 @@ function norm(s){s=(s||'')+'';return s.toLowerCase().replace(/ı/g,'i').replace(
 function esc(s){return (s==null?'':(''+s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function sumr(a){var t=0;for(var i=0;i<a.length;i++)t+=(a[i]||0);return t;}
 function ortala(a){var s=0,c=0;for(var i=0;i<a.length;i++){s+=(a[i]||0);c++;}return c?s/c:0;}
-function keysT(){var sec=aktifTurlar(),seen={},r=[];var iz=izinliTurler(),sinirli=iz.length>0;var ST=V.satici_tur||{};var tum=[];for(var tk in VT){if(tk!=="Hepsi")tum.push(tk);}function _vardi(v){if(!v)return false;var L=(v.a||[]).length;for(var z=0;z<L;z++){if((v.a[z]||0)>0||(v.k[z]||0)>0||(v.ug[z]||0)>0)return true;}return false;}for(var t=0;t<sec.length;t++){if(sec[t]==="Hepsi")continue;var S=VT[sec[t]]||{};for(var k in S){if(seen[k])continue;seen[k]=1;if(sinirli){var tl=ST[k],tamam=true;if(tl){for(var q=0;q<tl.length;q++){if(iz.indexOf(tl[q])<0){tamam=false;break;}}}else{for(var q2=0;q2<tum.length;q2++){var tk2=tum[q2];if(iz.indexOf(tk2)>=0)continue;var TK=VT[tk2];if(TK&&TK[k]&&_vardi(TK[k])){tamam=false;break;}}}if(!tamam)continue;}r.push(k);}}return r;}
+function keysT(){var sec=aktifTurlar(),seen={},r=[];for(var t=0;t<sec.length;t++){var S=VT[sec[t]]||{};for(var k in S){if(!seen[k]){seen[k]=1;r.push(k);}}}return r;}
 function esle(q){q=norm(q).trim();var ks=keysT();if(!q)return ks;var r=[];for(var i=0;i<ks.length;i++){if(norm(ks[i]).indexOf(q)>=0)r.push(ks[i]);}return r;}
 function secSeri(adlar){
   var sec=aktifTurlar();
