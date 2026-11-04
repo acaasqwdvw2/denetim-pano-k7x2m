@@ -439,7 +439,10 @@ function turFiltreUygula(){
     var s2='';var kc2=d.kontrol||{};
     for(var k2 in kc2){s2+=(s2?', ':'')+escT(k2)+': '+kc2[k2];}
     h[6].textContent=s2;}}}});
- var kpiAdlar=turGorunenAdlar().filter(grupSeciliGecer);
+ var kpiAdlar=turGorunenAdlar();
+ /* GENEL DENETIM DURUMU: kullanici yetkisindeki tedarikcilerin,
+    kullanicinin denetim turlerine ait gecmise yonelik toplamlari
+    (eski mantik). Arama ve grup secimi KPI'yi etkilemez. */
  var g={toplam:0,kapatilan:0,uygun:0,uygun_degil:0,acik:0,guncel24:0,gecmis24:0};
  kpiAdlar.forEach(function(ad){var d=seciliVeri(ad);if(!d)return;
   g.toplam+=d.toplam;g.kapatilan+=d.kapatilan;g.uygun+=d.uygun;
